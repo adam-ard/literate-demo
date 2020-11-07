@@ -1,0 +1,302 @@
+#+OPTIONS: toc:nil
+
+* EmacsConf Demo
+
+** Description
+
+This project demonstrates how to use [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] inside of
+emacs. Using this README.org as the source, you can generate markdown
+documentation as well as source code. This strategy has several
+advantages.
+
+1. It keeps documentation and source code always in sync. Source code
+   is never edited separately from the documentation. They are tightly
+   coupled.
+
+2. It allows you to present your code in a way that better suits human
+   understanding. Source can be rearranged and reassembled when it is
+   generated to accomodate a compiler or interpreter.
+
+3. It allows you to take advantage of all the other features of
+   org-mode that naturally enhance your documentation (embedding
+   diagrams, running code snippets inline, embedding TODO items,
+   time-tracking, and much more)
+
+4. Since Org-mode is very easy to customize, it allows you to further
+   specialize your personal workflow.
+
+5. Is allow you to reuse code and reduce code duplication in ways that
+   can can be difficult directly in source code.
+
+This document demonstrates many of these benefits and is hopefully a
+useful starting point for your own literate programming projects.
+
+*** Tangling and Weaving
+
+When Donald Knuth presented literate programming in 1984, he described
+two fundamental transformations that can be applied to a literate
+source document, a tangle and a weave. A tangle generates source code
+documents in the format appropriate for a compiler or interpreter. A
+weave produces well formatted documentation with embedded code
+snippets.
+
+A literate source document, therefore, contains all the source and
+documentation necessary for these two transformations. For this
+document, Donald Knuth uses a hybrid of latex and source code. As you
+would expect, his exported documents are beautfully typeset.
+
+I opted for a little less intensive solution (one day I'll learn
+latex) that uses org-mode for my literate source document. Org-mode is
+well suited to this because it allows prose and code snippets to
+naturally co-exist. Most importantly, it already has built-in support
+for basic weaving and tangling.
+
+Below is a diagram illustrating my basic approach. From your
+README.org file, you "tangle" all your source code, and "weave" your
+documentation. For the benefit of those not using emacs, I typically
+commit my markdown file and source code, versioning my org file
+separately in a system of my own--and no one's the wiser ;)
+
+#+begin_src dot :file literate.png
+digraph G {
+	
+  subgraph cluster_0 {
+    style=filled;
+    label = "git";
+	  B;
+	  C;
+  }
+
+  A -> B [label="tangle"];
+  A -> C [label="weave"];
+
+  A [label="README.org"];
+	B [label="source code"];
+	C [label="README.md"];
+}
+#+end_src
+
+#+RESULTS:
+[[file:literate.png]]
+
+
+
+** Tangle
+
+To tangle the current file (in other words, to generate the
+source code), run the following elisp command:
+
+#+begin_src elisp
+(org-babel-tangle)
+#+end_src
+
+The keyboard shortcut for this command is ~C-c C-v t~. To tangle only
+the file where the cursor is located use the prefix command ~C-u~. So
+the full command would be ~C-u C-c C-v t~.
+
+To tangle a file into another buffer and not to a file on disk, run
+~C-c C-v C-v~ with your cursor on the section you would like to
+tangle. This is a handy way to check how your file will be arranged.
+
+** Weave
+
+To weave the current file (in other words, to generate documentation), run
+the following command:
+
+#+begin_src elisp
+(org-gfm-export-to-markdown)
+#+end_src
+
+#+RESULTS:
+: README.md
+
+** Golang installation instructions
+
+To install golang follow these instructions for your operating system.d
+
+https://golang.org/doc/install
+
+** Build instructions
+
+The following command will build your project and deposit a executable file
+called demo in the current directory.
+
+#+begin_src bash
+go build
+#+end_src
+
+** Run
+
+To run a built project, execute the following. After following the
+steps outlined in "Build Instructions" above:
+
+#+begin_src bash :results verbatim
+./demo
+#+end_src
+
+** Static Analysis
+
+The ~go vet~ command can report additional potential problems that the
+compiler will not catch:
+
+#+begin_src bash
+go vet
+#+end_src
+
+** Formatting
+
+The ~go fmt~ will format your source code in a standard way. It is
+like a linter that actually corrects the problems it finds automatically.
+
+#+begin_src bash
+go fmt .
+#+end_src
+
+** lit-file Snippet                                               :noexport:
+
+Add a snippet file, to make adding literate programming files easier. 
+
+file:~/.emacs.d/snippets/org-mode/lit-file
+#+begin_src snippet :tangle ~/.emacs.d/snippets/org-mode/lit-file :noweb no-export
+# -*- mode: snippet -*-
+# name: add literate file
+# key: lit-file
+# --
+file:$1
+,#+begin_src $2 :tangle $1 :noweb no-export
+$0
+,#+end_src
+#+end_src
+
+After tangling the above file, run the following to make it available:
+
+#+begin_src elisp
+(yas-reload-all)
+#+end_src
+
+#+RESULTS:
+: [yas] Prepared just-in-time loading of snippets successfully.
+
+
+** lit-sec Snippet                                                :noexport:
+
+Add a snippet file, to make adding literate programming sections easier. 
+
+file:~/.emacs.d/snippets/org-mode/lit-sec
+#+begin_src snippet :tangle ~/.emacs.d/snippets/org-mode/lit-sec :noweb no-export
+# -*- mode: snippet -*-
+# name: add literate section
+# key: lit-sec
+# --
+$1+=
+,#+begin_src $2 :noweb no-export :noweb-ref $1
+$0
+,#+end_src
+#+end_src
+
+After tangling the above file, run the following to make it available:
+
+#+begin_src elisp
+(yas-reload-all)
+#+end_src
+
+#+RESULTS:
+: [yas] Prepared just-in-time loading of snippets successfully.
+
+
+** Main
+
+Below is the framework for the main file
+
+file:main.go.m4
+#+begin_src go :tangle main.go.m4 :noweb no-export
+package main
+
+import (
+	<<imports>>
+)
+
+<<functions>>
+
+func main() {
+	<<main>>
+}
+#+end_src
+
+** Main code
+
+In main, we say hello and then give you a random number
+
+main+=
+#+begin_src go :noweb no-export :noweb-ref main
+SayHello()
+GiveRandomNumber()
+#+end_src
+
+** SayHello()
+
+Say Hello needs to import fmt to be able to print to stdout.
+
+imports+=
+#+begin_src go :noweb no-export :noweb-ref imports
+"fmt"
+#+end_src
+
+SayHello, says hello to you.
+
+functions+=
+#+begin_src go :noweb no-export :noweb-ref functions
+func SayHello() {
+	__("SayHello()")
+}
+#+end_src
+
+** GiveRandomNumber()
+
+Go provides a library for random numbers. 
+
+imports+=
+#+begin_src go :noweb no-export :noweb-ref imports
+"math/rand"
+"time"
+#+end_src
+
+Print a non-negative number from 0-n
+
+functions+=
+#+begin_src go :noweb no-export :noweb-ref functions
+func GiveRandomNumber() {
+	rand.Seed(time.Now().UnixNano())
+	__(rand.Intn(100))
+}
+#+end_src
+
+** Generate Macros
+
+Sometimes it is nice to use a macro language that is a little more
+powerful than the tangle feature available in org-mode. In that case,
+it is simple to use a preprocessor like ~m4~. If you find yourself
+wanting to pass an argument to a noweb section, this is what you can
+do.
+
+Run the following to execute m4 on your source file using the m4 macro
+file defined below:
+
+#+begin_src bash
+m4 macros.m4 main.go.m4 > main.go
+#+end_src
+
+#+RESULTS:
+
+** Macro file
+
+Define a macro that allows you to replace fmt.Printf with a simple
+symbol ~__~ that is illegal in golang itself. This is not a very
+useful macro in and of itself, but demonstrates the ability to do even
+more advanced preprocessing than tangle provides, when needed.
+
+
+file:macros.m4
+#+begin_src m4 :tangle macros.m4 :noweb no-export
+define(`__', `fmt.Println($1)')
+#+end_src
