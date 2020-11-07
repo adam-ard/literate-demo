@@ -57,7 +57,7 @@ documentation. For the benefit of those not using emacs, I typically
 commit my markdown file and source code, versioning my org file
 separately in a system of my own--and no one's the wiser ;)
 
-#+begin_src dot :file literate.png
+#+begin_src dot :file literate.png :exports both
 digraph G {
 	
   subgraph cluster_0 {
