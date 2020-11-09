@@ -5,7 +5,7 @@
 ** Description
 
 This project demonstrates how to use [[https://en.wikipedia.org/wiki/Literate_programming][literate programming]] inside of
-emacs. Using this README.org as the source, you can generate markdown
+Emacs. Using this README.org as the source, you can generate markdown
 documentation as well as source code. This strategy has several
 advantages.
 
@@ -15,7 +15,7 @@ advantages.
 
 1. It allows you to present your code in a way that better suits human
    understanding. Source can be rearranged when it is generated to
-   accomodate a compiler or interpreter.
+   accommodate a compiler or interpreter.
 
 1. It allows you to take advantage of all the other features of
    org-mode that naturally enhance your documentation (embedding
@@ -43,7 +43,7 @@ snippets.
 A literate source document, therefore, contains all the source and
 documentation necessary for these two transformations. For this
 document, Donald Knuth uses a hybrid of latex and source code. As you
-would expect, his exported documents are beautfully typeset.
+would expect, his exported documents are beautifully typeset.
 
 I opted for a little less intensive solution (one day I'll learn
 latex) that uses org-mode for my literate source document. Org-mode is
@@ -53,7 +53,7 @@ for basic weaving and tangling.
 
 Below is a diagram illustrating my basic approach. From your
 README.org file, you "tangle" all your source code, and "weave" your
-documentation. For the benefit of those not using emacs, I typically
+documentation. For the benefit of those not using Emacs, I typically
 commit my markdown file and source code, versioning my org file
 separately in a system of my own--and no one's the wiser ;)
 
