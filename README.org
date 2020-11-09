@@ -310,11 +310,6 @@ symbol ~__~ that is illegal in golang itself. This is not a very
 useful macro in and of itself, but demonstrates the ability to do even
 more advanced preprocessing than tangle provides, when needed.
 
-imports+=
-#+begin_src go :noweb no-export :noweb-ref imports
-"time"
-#+end_src
-
 file:macros.m4
 #+begin_src m4 :tangle macros.m4 :noweb no-export
 define(`__', `fmt.Println($1, time.Now().String())')
