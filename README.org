@@ -90,6 +90,9 @@ source code), run the following elisp command:
 (org-babel-tangle)
 #+end_src
 
+#+RESULTS:
+| macros.m4 | main.go.m4 | main.go | ~/.emacs.d/snippets/org-mode/lit-sec | ~/.emacs.d/snippets/org-mode/lit-file |
+
 The keyboard shortcut for this command is ~C-c C-v t~. To tangle only
 the file where the cursor is located use the prefix command ~C-u~. So
 the full command would be ~C-u C-c C-v t~.
@@ -283,11 +286,13 @@ func GiveRandomNumber() {
 
 ** Generate Macros
 
-Sometimes it is nice to use a macro language that is a little more
-powerful than the tangle feature available in org-mode. In that case,
-it is simple to use a preprocessor like ~m4~. If you find yourself
+Tangle is effectively a light-weight preprocessor. But, sometimes it
+is nice to use a macro language that is a little more powerful than
+the tangling features available in org-mode. In that case, it is
+simple to use a preprocessor like [[https://en.wikipedia.org/wiki/M4_(computer_language)][m4]] in concert with the regular
+literate programming features demonstrated above. If you find yourself
 wanting to pass an argument to a noweb section, this is what you can
-do.
+do instead.
 
 Run the following to execute m4 on your source file using the m4 macro
 file defined below:
