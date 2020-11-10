@@ -53,20 +53,13 @@ for basic weaving and tangling.
 
 Below is a diagram illustrating my basic approach. From your
 README.org file, you "tangle" all your source code, and "weave" your
-documentation. For the benefit of those not using Emacs, I typically
-commit my markdown file and source code, versioning my org file
-separately in a system of my own--and no one's the wiser ;)
+documentation. When I collaborate with people not using Emacs, I
+typically commit my markdown file and source code, versioning my org
+file separately in a system of my own--and no one's the wiser ;)
 
 #+begin_src dot :file literate.png :exports both
 digraph G {
 	
-  subgraph cluster_0 {
-    style=filled;
-    label = "git";
-	  B;
-	  C;
-  }
-
   A -> B [label="tangle"];
   A -> C [label="weave"];
 
